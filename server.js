@@ -4,8 +4,16 @@ const reqPros = require('request-promise')
 const fetch = require('node-fetch');
 const app = express();
 
+const allowCrossDomain = (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+}
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(allowCrossDomain)
 
 app.set('port', (process.env.PORT || 3001));
 
@@ -42,7 +50,4 @@ app.get('/r/:subName/comments/:postId/:postName', (req, res) => {
     res.json(json)
   })
 })
-
-
-// getReddit();
 

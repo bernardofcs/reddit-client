@@ -132,7 +132,7 @@ class SearchBox extends Component {
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Type a programming language',
+      placeholder: 'Type a subreddit',
       value,
       onChange: this.onChange
     };
