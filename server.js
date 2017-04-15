@@ -1,3 +1,5 @@
+const SUGGESTED_SUBREDDIT_COUNT = 100;
+
 const express = require('express');
 const bodyParser = require('body-parser')
 const reqPros = require('request-promise')
@@ -26,7 +28,7 @@ app.listen(app.get('port'), () => {
 
 
 app.get('/', (req, res) => {
-  fetch('https://reddit.com/reddits.json').then((fetchRes) => {
+  fetch(`https://reddit.com/reddits.json?limit=${SUGGESTED_SUBREDDIT_COUNT}`).then((fetchRes) => {
     return fetchRes.json()
   }).then((json) => {
     res.json(json)

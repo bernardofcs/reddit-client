@@ -2,111 +2,51 @@ import React, { Component } from 'react';
 import Autosuggest from 'react-autosuggest';
 import '../styles/SearchBox.css'
 
-const languages = [
-  {
-    name: 'C',
-    year: 1972
-  },
-  {
-    name: 'C#',
-    year: 2000
-  },
-  {
-    name: 'C++',
-    year: 1983
-  },
-  {
-    name: 'Clojure',
-    year: 2007
-  },
-  {
-    name: 'Elm',
-    year: 2012
-  },
-  {
-    name: 'Go',
-    year: 2009
-  },
-  {
-    name: 'Haskell',
-    year: 1990
-  },
-  {
-    name: 'Java',
-    year: 1995
-  },
-  {
-    name: 'Javascript',
-    year: 1995
-  },
-  {
-    name: 'Perl',
-    year: 1987
-  },
-  {
-    name: 'PHP',
-    year: 1995
-  },
-  {
-    name: 'Python',
-    year: 1991
-  },
-  {
-    name: 'Ruby',
-    year: 1995
-  },
-  {
-    name: 'Scala',
-    year: 2003
-  }
-];
-
-const escapeRegexCharacters = (str) => {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-const getSuggestions = value => {
-  const escapedValue = escapeRegexCharacters(value.trim());
-  if (escapedValue === '') {
-    return [];
-  }
-  const regex = new RegExp('^' + escapedValue, 'i');
-  return languages.filter(language => regex.test(language.name));
-};
-
-const getSuggestionValue = suggestion => suggestion.name;
-
-const renderSuggestion = suggestion => (
-  <span>
-    {suggestion.name}
-  </span>
-);
-
-const renderSuggestionsContainer = ({ containerProps, children, query }) => (
-  <div {...containerProps}>
-    {children}
-    {
-      <div className="footer">
-        Press Enter to search <strong>{query}</strong>
-      </div>
-    }
-  </div>
-);
 
 class SearchBox extends Component {
-  constructor() {
-    super();
-
-    // Autosuggest is a controlled component.
-    // This means that you need to provide an input value
-    // and an onChange handler that updates this value (see below).
-    // Suggestions also need to be provided to the Autosuggest,
-    // and they are initially empty because the Autosuggest is closed.
+  constructor(props) {
+    super(props);
     this.state = {
       value: '',
       suggestions: []
     };
   }
+
+  escapeRegexCharacters = (str) => {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  getSuggestions = value => {
+    const escapedValue = this.escapeRegexCharacters(value.trim());
+    if (escapedValue === '') {
+      return [];
+    }
+    const regex = new RegExp('^' + escapedValue, 'i');
+    const temp = this.props.subreddits.filter(subreddit => regex.test(subreddit.data.display_name));
+    console.log(temp)
+    return temp.map((sub) => {
+      return {name: sub.data.name, display_name: sub.data.display_name}
+    })
+  };
+
+  getSuggestionValue = suggestion => suggestion.display_name;
+
+  renderSuggestion = suggestion => (
+    <span>
+      {suggestion.display_name}
+    </span>
+  );
+
+  renderSuggestionsContainer = ({ containerProps, children, query }) => (
+    <div {...containerProps}>
+      {children}
+      {
+        <div className="footer">
+          Press Enter to search <strong>{query}</strong>
+        </div>
+      }
+    </div>
+  );
 
   onChange = (event, { newValue, method }) => {
     this.setState({
@@ -118,7 +58,7 @@ class SearchBox extends Component {
   // You already implemented this logic above, so just use it.
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      suggestions: getSuggestions(value)
+      suggestions: this.getSuggestions(value)
     });
   };
 
@@ -129,22 +69,36 @@ class SearchBox extends Component {
     });
   };
 
+  componentDidMount(){
+    if(this.props.subreddits.length > 0){
+      const suggestionFetch = []
+      this.props.subreddits.forEach((sub) => {
+        suggestionFetch.push({
+          name: sub.data.name,
+          display_name: sub.data.display_name
+        })
+      })
+      this.setState({suggestions: suggestionFetch});
+    }
+  }
+
   render() {
-    const { value, suggestions } = this.state;
+    const { value } = this.state;
     const inputProps = {
-      placeholder: 'Type a subreddit',
+      placeholder: 'Look for a subreddit',
       value,
       onChange: this.onChange
     };
+
     return (
       <Autosuggest
-        suggestions={suggestions}
+        suggestions={this.state.suggestions}
         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
+        getSuggestionValue={this.getSuggestionValue}
+        renderSuggestion={this.renderSuggestion}
         inputProps={inputProps}
-        renderSuggestionsContainer={renderSuggestionsContainer}
+        renderSuggestionsContainer={this.renderSuggestionsContainer}
       />
     );
   }

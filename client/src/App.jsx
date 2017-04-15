@@ -19,7 +19,7 @@ class App extends Component {
       return res.json();
     })
     .then((data) => {
-      this.setState({ subreddits: data });
+      this.setState({ subreddits: data.data.children });
     });
   }
 
@@ -27,7 +27,9 @@ class App extends Component {
     return (
       <div className="App">
         <NavBar />
-        <SearchBox />                  
+        {this.state.subreddits.length > 0 &&
+          <SearchBox subreddits={this.state.subreddits} />  
+        }                
       </div>
     );
   }
