@@ -64,10 +64,6 @@ class SearchBox extends Component {
     this.setState({
       value: newValue
     });
-    if(method === 'enter'){
-      
-    }
-    console.log(method)
   };
 
   // Autosuggest will call this function every time you need to update suggestions.
@@ -88,12 +84,14 @@ class SearchBox extends Component {
   render() {
     const { value } = this.state;
     const inputProps = {
+      id: 'subreddit',
       placeholder: 'Look for a subreddit',
       value,
       onChange: this.onChange
     };
 
     return (
+      <form onSubmit={this.props.handleSearchEnter}>
       <Autosuggest
         suggestions={this.state.suggestions}
         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -102,7 +100,9 @@ class SearchBox extends Component {
         renderSuggestion={this.renderSuggestion}
         inputProps={inputProps}
         renderSuggestionsContainer={this.renderSuggestionsContainer}
+        onSuggestionSelected={this.props.handleSearchEnter}
       />
+      </form>
     );
   }
 }
