@@ -7,7 +7,9 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      subreddits: {}
+      currentWindow: 'index',
+      subreddits: {},
+      currentSubreddit: ''
     }
   }
 
@@ -23,12 +25,20 @@ class App extends Component {
     });
   }
 
+  handleSearchEnter = (e) => {
+    console.log('sijfasidj')
+  }
+
   render() {
     return (
       <div className="App">
         <NavBar />
-        {this.state.subreddits.length > 0 &&
-          <SearchBox subreddits={this.state.subreddits} />  
+        {this.state.currentWindow === 'index' && this.state.subreddits.length > 0 ? (              //index page
+          <SearchBox handleSearchEnter={this.handleSearchEnter} subreddits={this.state.subreddits} />  //search box
+          ) : (!this.state.subreddits.length && <h1> Loading Search </h1>) //before api loads
+        }
+        {this.state.currentWindow === 'subreddit' &&
+          <div>hello</div>
         }                
       </div>
     );
