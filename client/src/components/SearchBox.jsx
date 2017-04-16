@@ -12,6 +12,19 @@ class SearchBox extends Component {
     };
   }
 
+  componentDidMount(){
+    if(this.props.subreddits.length > 0){
+      const suggestionFetch = []
+      this.props.subreddits.forEach((sub) => {
+        suggestionFetch.push({
+          name: sub.data.name,
+          display_name: sub.data.display_name
+        })
+      })
+      this.setState({suggestions: suggestionFetch});
+    }
+  }
+
   escapeRegexCharacters = (str) => {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
@@ -22,9 +35,8 @@ class SearchBox extends Component {
       return [];
     }
     const regex = new RegExp('^' + escapedValue, 'i');
-    const temp = this.props.subreddits.filter(subreddit => regex.test(subreddit.data.display_name));
-    console.log(temp)
-    return temp.map((sub) => {
+    const filteredSubreddits = this.props.subreddits.filter(subreddit => regex.test(subreddit.data.display_name));
+    return filteredSubreddits.map((sub) => {
       return {name: sub.data.name, display_name: sub.data.display_name}
     })
   };
@@ -52,6 +64,10 @@ class SearchBox extends Component {
     this.setState({
       value: newValue
     });
+    if(method === 'enter'){
+      
+    }
+    console.log(method)
   };
 
   // Autosuggest will call this function every time you need to update suggestions.
@@ -68,19 +84,6 @@ class SearchBox extends Component {
       suggestions: []
     });
   };
-
-  componentDidMount(){
-    if(this.props.subreddits.length > 0){
-      const suggestionFetch = []
-      this.props.subreddits.forEach((sub) => {
-        suggestionFetch.push({
-          name: sub.data.name,
-          display_name: sub.data.display_name
-        })
-      })
-      this.setState({suggestions: suggestionFetch});
-    }
-  }
 
   render() {
     const { value } = this.state;

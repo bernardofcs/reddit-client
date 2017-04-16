@@ -11,7 +11,7 @@ class NavBar extends Component {
           </div>
           <ul className="nav navbar-nav">
             <li className="active"><a href="#">Search Page</a></li>
-            <li><a href="#">Page 1</a></li>
+            <li><a href="#">{this.props.currentSubreddit || 'No Selection'}</a></li>
           </ul>
         </div>
       </nav>
