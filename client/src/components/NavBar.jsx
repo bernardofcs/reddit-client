@@ -10,8 +10,8 @@ class NavBar extends Component {
             <a className="navbar-brand" href="#">Reddit Client</a>
           </div>
           <ul className="nav navbar-nav">
-            <li className="active"><a href="#">Search Page</a></li>
-            <li><a href="#">{this.props.subredditName}</a></li>
+            <li onClick={this.props.handleChangeToSearchPage} className="active"><a href="#">Search Page</a></li>
+            <li onClick={this.props.handleChangeToSubredditPage}><a href="#">{this.props.subredditName}</a></li>
           </ul>
         </div>
       </nav>

@@ -10,10 +10,7 @@ class App extends Component {
     this.state = {
       currentWindow: 'index',
       subreddits: {},
-      currentSubreddit: {
-        name: '',
-        posts: []
-      }
+      currentSubreddit: {}
     }
   }
 
@@ -29,9 +26,10 @@ class App extends Component {
     });
   }
 
-  handleSearchEnter = (e) => {
+  handleSearchEnter = (e) => {                                               //fetches subreddit posts and info
     e.preventDefault();
-    if(e.type !== 'click'){
+    if(e.type !== 'click'){     //makes sure no fetch is made on click
+      let posts = [];
       const subreddit = e.target.value || document.getElementById("subreddit").value;
       fetch(`http://localhost:3001/r/${subreddit}`).then((res) => {
         if(res.status >= 400) {
@@ -40,24 +38,38 @@ class App extends Component {
         return res.json();
       })
       .then((data) => {
-        this.setState({ currentSubreddit:{name: subreddit, posts: data.data.children}})
+        posts = data.data.children
+      }).then(() => {
+        fetch(`http://localhost:3001/r/${subreddit}/about`).then((res) => {
+          if(res.status >= 400) {
+            throw new Error("Bad response from server");
+          }
+          return res.json();
+        })
+        .then((data) => {
+          this.setState({ currentSubreddit:{name: subreddit, posts: posts, about: data.data}})          
+        })
       })
     }
   }
 
-  handlePageChange = (e) => {
-    
-  }
+  handleChangeToSearchPage = () => {this.setState({currentWindow: 'index'})}
+  handleChangeToSubredditPage = () => {this.setState({currentWindow: 'subreddit'})}
 
   render() {
     return (
       <div className="App">
-        <NavBar handlePageChange={this.handlePageChange} subredditName={this.state.currentSubreddit.name || null}/>                  {/* navbar */}
+        <NavBar                                                                                   //navbar
+          handleChangeToSearchPage={this.handleChangeToSearchPage}
+          handleChangeToSubredditPage={this.handleChangeToSubredditPage} 
+          subredditName={this.state.currentSubreddit.name || null}/>                  
         {this.state.currentWindow === 'index' && this.state.subreddits.length > 0 ? (              //index page
-          <SearchBox handleSearchEnter={this.handleSearchEnter} subreddits={this.state.subreddits} />  //search box
+          <SearchBox 
+            handleSearchEnter={this.handleSearchEnter} 
+            subreddits={this.state.subreddits} />  //search box
           ) : (!this.state.subreddits.length && <h1> Loading Search </h1>) //before api loads
         }
-        {this.state.currentWindow === 'subreddit' && this.state.currentSubreddit.posts.length > 0 &&
+        {this.state.currentWindow === 'subreddit' && this.state.currentSubreddit.posts.length > 0 &&    //subreddit page
           <SubReddit currentSubreddit={this.state.currentSubreddit} />
         }                
       </div>

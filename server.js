@@ -44,6 +44,15 @@ app.get('/r/:subName', (req, res) => {
   })
 })
 
+//gets sub info
+app.get('/r/:subName/about', (req, res) => {
+  fetch(`https://reddit.com/r/${req.params.subName}/about.json`).then((fetchRes) => {
+    return fetchRes.json()
+  }).then((json) => {
+    res.json(json)
+  })
+})
+
 //gets comments
 app.get('/r/:subName/comments/:postId/:postName', (req, res) => {
   fetch(`https://reddit.com/r/${req.params.subName}/comments/${req.params.postId}/${req.params.postName}.json`).then((fetchRes) => {
