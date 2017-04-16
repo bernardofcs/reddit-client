@@ -9,7 +9,7 @@ class App extends Component {
     super(props)
     this.state = {
       currentWindow: 'index',
-      subreddits: {},
+      subreddits: [],
       currentSubreddit: {}
     }
   }
@@ -22,7 +22,7 @@ class App extends Component {
       return res.json();
     })
     .then((data) => {
-      this.setState({ subreddits: data.data.children });
+      this.setState({ subreddits: data });
     });
   }
 
@@ -30,7 +30,7 @@ class App extends Component {
     e.preventDefault();
     if(e.type !== 'click'){     //makes sure no fetch is made on click
       let posts = [];
-      const subreddit = e.target.value || document.getElementById("subreddit").value;
+      const subreddit = e.target.value || document.getElementById("subreddit").value; //makes it work on either auto suggested or manual
       fetch(`http://localhost:3001/r/${subreddit}`).then((res) => {
         if(res.status >= 400) {
           throw new Error("Bad response from server");

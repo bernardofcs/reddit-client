@@ -31,7 +31,8 @@ app.get('/', (req, res) => {
   fetch(`https://reddit.com/reddits.json?limit=${SUGGESTED_SUBREDDIT_COUNT}`).then((fetchRes) => {
     return fetchRes.json()
   }).then((json) => {
-    res.json(json)
+    const subNames = json.data.children.map((sub) => sub.data.display_name)
+    res.json(subNames)
   })
 })
 

@@ -17,8 +17,7 @@ class SearchBox extends Component {
       const suggestionFetch = []
       this.props.subreddits.forEach((sub) => {
         suggestionFetch.push({
-          name: sub.data.name,
-          display_name: sub.data.display_name
+          display_name: sub
         })
       })
       this.setState({suggestions: suggestionFetch});
@@ -35,9 +34,9 @@ class SearchBox extends Component {
       return [];
     }
     const regex = new RegExp('^' + escapedValue, 'i');
-    const filteredSubreddits = this.props.subreddits.filter(subreddit => regex.test(subreddit.data.display_name));
+    const filteredSubreddits = this.props.subreddits.filter(subreddit => regex.test(subreddit));
     return filteredSubreddits.map((sub) => {
-      return {name: sub.data.name, display_name: sub.data.display_name}
+      return {display_name: sub}
     })
   };
 
