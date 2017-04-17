@@ -65,7 +65,6 @@ class App extends Component {
   handleFetchMorePosts = (e) => {
     e.preventDefault();
     const limit = this.state.currentSubreddit.posts.length + 25;
-    console.log(limit)
     fetch(`http://localhost:3001/r/${this.state.currentSubreddit.name}/amount/${limit}`).then((res) => {
       if(res.status >= 400) {
         throw new Error("Bad response from server");
