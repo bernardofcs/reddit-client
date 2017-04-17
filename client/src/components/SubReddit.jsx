@@ -17,7 +17,8 @@ class SubReddit extends Component {
               return(
                 <Post 
                   key={i}
-                  post={p} 
+                  post={p}
+                  handlePickPost={this.props.handlePickPost} 
                 />
               );
             })}    

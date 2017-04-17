@@ -11,7 +11,8 @@ class App extends Component {
     this.state = {
       currentWindow: 'index',
       subreddits: [],
-      currentSubreddit: {}
+      currentSubreddit: {},
+      currentPost: {},
     }
   }
 
@@ -54,6 +55,18 @@ class App extends Component {
     }
   }
 
+  handlePickPost = (e) => {
+    e.preventDefault();
+    fetch(`http://localhost:3001/r/${this.state.currentSubreddit.name}/comments/${e.target.getAttribute('data-id')}`).then((res) => {
+      if(res.status >= 400) {
+        throw new Error("Bad response from server");
+      }
+      return res.json();
+    }).then((data) => {
+      this.setState({currentPost: data[0].data.children[0].data, currentPostComments: data[1].data.children, currentWindow:'post'})
+    })
+  }
+
   handleChangeToSearchPage = () => {this.setState({currentWindow: 'index'})}
   handleChangeToSubredditPage = () => {this.setState({currentWindow: 'subreddit'})}
   handleChangeToPostPage = () => {this.setState({currentWindow: 'post'})}
@@ -72,7 +85,10 @@ class App extends Component {
           ) : (!this.state.subreddits.length && <h1> Loading Search </h1>) //before api loads
         }
         {this.state.currentWindow === 'subreddit' && this.state.currentSubreddit.posts.length > 0 &&    //subreddit page
-          <SubReddit currentSubreddit={this.state.currentSubreddit} />
+          <SubReddit handlePickPost={this.handlePickPost} currentSubreddit={this.state.currentSubreddit} />
+        }
+        {this.state.currentWindow === 'post' && this.state.currentSubreddit.comments &&
+          <PostPage currentPost={this.state.currentPost} />
         }                
       </div>
     );
