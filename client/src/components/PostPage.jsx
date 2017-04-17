@@ -7,12 +7,12 @@ class PostPage extends Component {
     const post = this.props.currentPost
     const date = new Date(post.created_utc * 1000);
     return (
-      <div>
+      <div className="container">
         <div className="jumbotron">
-          <h1>{post.subreddit}</h1>
+          <h1 className="page-header">{post.subreddit}</h1>
           <p>{post.title}</p>
           <span>submitted {moment(date).fromNow()} by {post.author}</span>
-          <br/><p>{post.selftext}</p>
+          <br/><span>{post.selftext}</span>
         </div>
         <div className="commentCollection">
           {this.props.comments.map((c, i) => {

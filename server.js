@@ -50,7 +50,7 @@ app.get('/r/:subName/amount/:limit', (req, res) => {
   fetch(`https://reddit.com/r/${req.params.subName}/.json?limit=${req.params.limit}`).then((fetchRes) => {
     return fetchRes.json()
   }).then((json) => {
-    res.json(json)
+    res.json(json.data.children)
   })
 })
 

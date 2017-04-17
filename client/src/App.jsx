@@ -40,6 +40,9 @@ class App extends Component {
         return res.json();
       })
       .then((data) => {
+        if(data.error){
+          return
+        }
         posts = data.data.children
       }).then(() => {
         fetch(`http://localhost:3001/r/${subreddit}/about`).then((res) => {
@@ -52,7 +55,7 @@ class App extends Component {
           if(posts.length > 0){
             this.setState({ currentWindow: 'subreddit', currentSubreddit:{name: subreddit, posts: posts, about: data.data}})          
           }else{
-            console.log('sub doesnt exist')
+            alert("Subreddit does not exist")            
           }
         })
       })
@@ -70,16 +73,17 @@ class App extends Component {
       return res.json();
     })
     .then((data) => {
-      if(data.data.children.length > 0){
-        this.setState({ currentWindow: 'subreddit', currentSubreddit:{name: this.state.currentSubreddit.name, posts: data.data.children, 
+      if(data.length > 0){
+        this.setState({ currentWindow: 'subreddit', currentSubreddit:{name: this.state.currentSubreddit.name, posts: data, 
           about: this.state.currentSubreddit.about}})          
       }else{
-        console.log('sub doesnt exist')
+        alert("Subreddit does not exist")
       }  
     })
   }
 
   handlePickPost = (e) => {
+    e.preventDefault();
     fetch(`http://localhost:3001/r/${this.state.currentSubreddit.name}/comments/${e.target.getAttribute('data-id')}`).then((res) => {
       if(res.status >= 400) {
         throw new Error("Bad response from server");
@@ -87,6 +91,7 @@ class App extends Component {
       return res.json();
     }).then((data) => {
       this.setState({currentPost: data[0].data.children[0].data, currentPostComments: data[1].data.children, currentWindow:'post'})
+      window.scrollTo(0,0)
     })
   }
 
