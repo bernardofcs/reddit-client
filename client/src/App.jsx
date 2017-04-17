@@ -87,8 +87,8 @@ class App extends Component {
         {this.state.currentWindow === 'subreddit' && this.state.currentSubreddit.posts.length > 0 &&    //subreddit page
           <SubReddit handlePickPost={this.handlePickPost} currentSubreddit={this.state.currentSubreddit} />
         }
-        {this.state.currentWindow === 'post' && this.state.currentSubreddit.comments &&
-          <PostPage currentPost={this.state.currentPost} />
+        {this.state.currentWindow === 'post' &&
+          <PostPage currentPost={this.state.currentPost} comments={this.state.currentPostComments} />
         }                
       </div>
     );
