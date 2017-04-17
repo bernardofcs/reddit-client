@@ -4,7 +4,7 @@ import moment from 'moment'
 class Post extends Component {
   render(){
     const post = this.props.post.data
-    const date = new Date((post.created - 60 * 60 * 3) * 1000);
+    const date = new Date(post.created_utc * 1000);
     return (
       <div>
         {post.preview ? 

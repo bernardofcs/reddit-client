@@ -49,14 +49,37 @@ class App extends Component {
           return res.json();
         })
         .then((data) => {
-          this.setState({ currentWindow: 'subreddit', currentSubreddit:{name: subreddit, posts: posts, about: data.data}})          
+          if(posts.length > 0){
+            this.setState({ currentWindow: 'subreddit', currentSubreddit:{name: subreddit, posts: posts, about: data.data}})          
+          }else{
+            console.log('sub doesnt exist')
+          }
         })
       })
     }
   }
 
-  handlePickPost = (e) => {
+  handleFetchMorePosts = (e) => {
     e.preventDefault();
+    const limit = this.state.currentSubreddit.posts.length + 25;
+    console.log(limit)
+    fetch(`http://localhost:3001/r/${this.state.currentSubreddit.name}/amount/${limit}`).then((res) => {
+      if(res.status >= 400) {
+        throw new Error("Bad response from server");
+      }
+      return res.json();
+    })
+    .then((data) => {
+      if(data.data.children.length > 0){
+        this.setState({ currentWindow: 'subreddit', currentSubreddit:{name: this.state.currentSubreddit.name, posts: data.data.children, 
+          about: this.state.currentSubreddit.about}})          
+      }else{
+        console.log('sub doesnt exist')
+      }  
+    })
+  }
+
+  handlePickPost = (e) => {
     fetch(`http://localhost:3001/r/${this.state.currentSubreddit.name}/comments/${e.target.getAttribute('data-id')}`).then((res) => {
       if(res.status >= 400) {
         throw new Error("Bad response from server");
@@ -85,7 +108,10 @@ class App extends Component {
           ) : (!this.state.subreddits.length && <h1> Loading Search </h1>) //before api loads
         }
         {this.state.currentWindow === 'subreddit' && this.state.currentSubreddit.posts.length > 0 &&    //subreddit page
-          <SubReddit handlePickPost={this.handlePickPost} currentSubreddit={this.state.currentSubreddit} />
+          <SubReddit 
+            handlePickPost={this.handlePickPost}
+            handleFetchMorePosts={this.handleFetchMorePosts} 
+            currentSubreddit={this.state.currentSubreddit} />
         }
         {this.state.currentWindow === 'post' &&
           <PostPage currentPost={this.state.currentPost} comments={this.state.currentPostComments} />

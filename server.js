@@ -45,6 +45,15 @@ app.get('/r/:subName', (req, res) => {
   })
 })
 
+//gets more posts
+app.get('/r/:subName/amount/:limit', (req, res) => {
+  fetch(`https://reddit.com/r/${req.params.subName}/.json?limit=${req.params.limit}`).then((fetchRes) => {
+    return fetchRes.json()
+  }).then((json) => {
+    res.json(json)
+  })
+})
+
 //gets sub info
 app.get('/r/:subName/about', (req, res) => {
   fetch(`https://reddit.com/r/${req.params.subName}/about.json`).then((fetchRes) => {

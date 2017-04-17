@@ -23,7 +23,7 @@ class SubReddit extends Component {
               );
             })}    
           </div><br />
-          <button>Load More</button>
+          <button onClick={this.props.handleFetchMorePosts} >Load More</button>
         </div>
       </div>
     );
