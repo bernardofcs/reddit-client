@@ -6,7 +6,7 @@ Simple reddit ui web-app for demonstration purposes.
 
 Clone the repo: `git clone git@github.com:bernardofcs/reddit-client.git` <br>
 Browse into the folder: `cd reddit-client`<br>
-Install dependencies: `npm i && cd client && npm i && cd..`<br>
+Install dependencies: `npm i && cd client && npm i && cd../`<br>
 Start the server: `npm start`<br><br>
 Access the web app through `http://localhost:3000`<br>
 The server API is available on `http://localhost:3001`
