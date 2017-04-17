@@ -6,7 +6,8 @@
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "babel-node server.js",
-    "client": "babel-node start-client.js"
+    "client": "babel-node start-client.js",
+    "test": "mocha --timeout 10000"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,17 @@
     "reactstrap": "^4.5.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.0",
-    "snoowrap": "^1.13.0"
+    "snoowrap": "^1.13.0",
+    "chai": "^3.5.0",
+    "chai-http": "^2.0.1",
+    "mocha": "^2.4.5"
+  },
+  "devDependencies": {
+    "babel-jest": "^19.0.0",
+    "enzyme": "^2.8.2",
+    "jest": "^18.0.0",
+    "regenerator-runtime": "^0.10.3",
+    "supertest": "^2.0.1",
+    "supertest-as-promised": "^4.0.2"
   }
 }

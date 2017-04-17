@@ -1,4 +1,4 @@
-const SUGGESTED_SUBREDDIT_COUNT = 100;
+const SUGGESTED_SUBREDDIT_COUNT = 60;
 
 const express = require('express');
 const bodyParser = require('body-parser')
@@ -71,4 +71,5 @@ app.get('/r/:subName/comments/:postId', (req, res) => {
     res.json(json)
   })
 })
+
 
