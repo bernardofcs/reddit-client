@@ -3,6 +3,7 @@ import './styles/App.css';
 import SearchBox from './components/SearchBox.jsx'
 import NavBar from './components/NavBar.jsx'
 import SubReddit from './components/SubReddit.jsx'
+import PostPage from './components/PostPage.jsx'
 
 class App extends Component {
   constructor(props){
@@ -47,7 +48,7 @@ class App extends Component {
           return res.json();
         })
         .then((data) => {
-          this.setState({ currentSubreddit:{name: subreddit, posts: posts, about: data.data}})          
+          this.setState({ currentWindow: 'subreddit', currentSubreddit:{name: subreddit, posts: posts, about: data.data}})          
         })
       })
     }
@@ -55,6 +56,7 @@ class App extends Component {
 
   handleChangeToSearchPage = () => {this.setState({currentWindow: 'index'})}
   handleChangeToSubredditPage = () => {this.setState({currentWindow: 'subreddit'})}
+  handleChangeToPostPage = () => {this.setState({currentWindow: 'post'})}
 
   render() {
     return (

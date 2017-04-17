@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Banner extends Component {
+class PostPage extends Component {
   render() {
     return (
       <div>
@@ -10,4 +10,4 @@ class Banner extends Component {
   }
 }
 
-export default Banner;
+export default PostPage;
